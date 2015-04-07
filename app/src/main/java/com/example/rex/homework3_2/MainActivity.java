@@ -6,14 +6,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
-    private ImageView txtWord;
+    private TextView txtWord;
     private Button startBtn, stopBtn;
 
     @Override
@@ -24,11 +26,20 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void findViews() {
-        txtWord = (ImageView) findViewById(R.id.txtWord);
+        txtWord = (TextView) findViewById(R.id.txtWord);
         startBtn = (Button) findViewById(R.id.startBtn);
         stopBtn = (Button) findViewById(R.id.stopBtn);
+        getAnimationSet();
+
+    }
+
+    private AnimationSet getAnimationSet(){
         TranslateAnimation translateAnimation = getTranslateAnimation();
         RotateAnimation rotateAnimation=getRotateAnimation();
+        AnimationSet animationSet = new AnimationSet(true);
+        animationSet.addAnimation(translateAnimation);
+        animationSet.addAnimation(rotateAnimation);
+        return  animationSet;
     }
 
 
@@ -36,10 +47,14 @@ public class MainActivity extends ActionBarActivity {
     public void onStartClick(View view) {
         txtWord.startAnimation(getTranslateAnimation());
         txtWord.startAnimation(getRotateAnimation());
+
+        Animation anim= AnimationUtils.loadAnimation(MainActivity.this,R.anim.anim);
+        txtWord.startAnimation(anim);
+
     }
 
     public void onStopClick(View view){
-        findViews();
+        txtWord.clearAnimation();
     }
 
     private TranslateAnimation getTranslateAnimation() {
